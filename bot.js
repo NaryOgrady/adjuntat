@@ -1,3 +1,4 @@
+
 const auth = require('./auth.json');
 const Discord = require('discord.js');
 const service = require('./trello-service.js');
