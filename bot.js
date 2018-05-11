@@ -30,7 +30,6 @@ let processActivity = function(data) {
             channel.send(msg);
         }
     }
-
 };
 
 let queryTrello = function() {
@@ -44,7 +43,9 @@ let queryTrello = function() {
 client.on('ready', () => {
     client.user.setUsername('Adjutant');
     queryTrello();
-    setInterval(queryTrello, 60000);
+    setInterval(queryTrello, 900000);
+    const channel = client.channels.find('name', 'notifications');
+    channel.send('Adjutant online. v1.0.1');
 });
 
 client.on('message', (message) => {
