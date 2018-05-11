@@ -2,6 +2,7 @@
 const auth = require('./auth.json');
 const Discord = require('discord.js');
 const service = require('./trello-service.js');
+const composer = require('./composer.js');
 
 const client = new Discord.Client();
 let lastActivityID = '';
@@ -9,7 +10,7 @@ let lastActivityID = '';
 let processActivity = function(data) {
     const channel = client.channels.find('name', 'notifications');
     let index = -1;
-    let lastActivity = data.find(element => {
+    let lastActivity = data.find((element) => {
         return element.id === lastActivityID;
     });
     if (lastActivity) {
@@ -25,31 +26,20 @@ let processActivity = function(data) {
         for (let i = newActivity.length; i--;) {
             let activity = newActivity[i];
             lastActivityID = activity.id;
-            composeActivityMessage(activity);
-        }
-    }
-
-    function composeActivityMessage (activity) {
-        let data = activity.data;
-        let msg = '';
-        if (data.hasOwnProperty('listAfter') && data.hasOwnProperty('listBefore')) {
-            let user = activity.memberCreator.fullName;
-            let card = data.card.name;
-            let listAfter = data.listAfter.name;
-            let listBefore = data.listBefore.name;
-            msg = `${user} moved ${card} from ${listBefore} to ${listAfter}`;
+            msg = composer.composeMessage(activity);
             channel.send(msg);
         }
     }
-}
+
+};
 
 let queryTrello = function() {
     console.log('querying trello');
     service.getActivity()
-    .then(data => {
+    .then((data) => {
         processActivity(data);
     });
-}
+};
 
 client.on('ready', () => {
     client.user.setUsername('Adjutant');
@@ -68,7 +58,6 @@ client.on('message', (message) => {
             default:
                 message.channel.send('Unknown command');
         }
-
     }
 });
 
