@@ -1,6 +1,6 @@
 {
-  "name": "cultist",
-  "version": "0.1.0",
+  "name": "adjutant",
+  "version": "1.0.0",
   "description": "Discord bot for project notifications",
   "main": "bot.js",
   "scripts": {
